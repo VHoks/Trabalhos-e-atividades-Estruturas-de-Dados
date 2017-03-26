@@ -1,0 +1,36 @@
+﻿23:48 25-Mar-17
+Algoritmo "Buscar um elemento em um vetor"
+
+Função vasculhar_vetor (v: vetor de caracteres, tam: inteiro, c: char)
+Variáveis
+         i: inteiro
+INÍCIO FUNÇÃO
+         Para (i = 0 até i ≤ tam), faça:
+                   Se (v[i] ≠ c), então:
+                             i ← i + 1
+                   Senão:
+                             Retorne (i)
+                   FIM SE
+         FIM PARA
+         Se (i > tam), então:
+                   Retorne (-1)
+         FIM SE
+FIM FUNÇÃO
+
+Variáveis
+         char: caractere
+         vet: vetor de 50 caracteres
+         posição: inteiro
+INICIO FUNÇÃO
+         Leia (char)
+         posição = vasculhar_vetor(vet, 50, char)
+         Se (posição < 0), então:
+                   Escreva ("O caractere ", char," não foi encontrado no vetor!")
+         Senão:
+                   Escreva ("O caractere ", char," foi encontrado na posição ", i," do vetor.'')
+         FIM SE
+FIM ALGORITMO
+                  
+
+                             
+          
