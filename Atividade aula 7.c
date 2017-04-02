@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
 #define TAM_MAX 10
 
 int stack[TAM_MAX];
@@ -55,7 +54,7 @@ int pop(void)
 
 int main(void)
 {
-    int num;
+    short int num;
     short int i;
     srand((unsigned)time(NULL));
 
