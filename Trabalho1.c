@@ -169,7 +169,7 @@ void imprimir_instrucoes(void)
 {
     printf("\nBem vindo ao jogo Batalha Naval!\n");
     printf("\nO campo de batalha tem dimensao de %d X %d unidades.\n", TAM_MAPA, TAM_MAPA);
-    printf("\nCada jogador tem os seguintes navios:\n\nUm porta-aviao - 5 espacos\nDois encouracados - 4 espacos\nDois contratorpedeiros - 3 espacos\nTres submarinos - 2 espacos\n");
+    printf("\nCada jogador tem os seguintes navios com os respectivos tamanhos:\n\nUm porta-aviao - 5 espacos\nDois encouracados - 4 espacos\nDois contratorpedeiros - 3 espacos\nTres submarinos - 2 espacos\n");
     printf("\nLEGENDA:\n\n~ -> Agua\nP -> Porta-aviao\nE -> Encouracado\nC -> Contratorpedeiro\nS -> Submarino\n");
     printf("\nVence quem derrubar todos os navios inimigos primeiro!");
     printf("\n\nPressione ENTER para fechar as instrucoes...");
