@@ -17,11 +17,12 @@
 #define limpar_tela() system("clear")
 #endif
 
-/* Macros dos tamanhos da matriz e dos nomes dos jogadores*/
+/* Macros da quantidade de acertos necessarios para ganhar, dos tamanhos da matriz e dos nomes dos jogadores*/
 #define TAM_MAPA 15
 #define TAM_NOME 30
 #define GANHOU 25
 
+/* Protótipos das funcoes */
 void montar_mapas(char[][TAM_MAPA], char[][TAM_MAPA], char[][TAM_MAPA], char[][TAM_MAPA]);
 void posicionar_navio(char[][TAM_MAPA], short int, char, unsigned int);
 void imprimir_instrucoes(void);
@@ -35,12 +36,14 @@ int main(void)
 {
     char mostrar_mapa_p1[TAM_MAPA][TAM_MAPA], mostrar_mapa_p2[TAM_MAPA][TAM_MAPA]; /* Mapas que serão mostrados aos dos jogadores */
     char nav_mapa_p1[TAM_MAPA][TAM_MAPA], nav_mapa_p2[TAM_MAPA][TAM_MAPA]; /* Mapas que contem os navios */
-    short int resultado_p1, resultado_p2, rodada = 1; /* Variaveis usadas para armazenar o valor que indica se o jogador acertou ou errou a jogada */
+    short int resultado_p1, resultado_p2; /* Variaveis usadas para armazenar o valor que indica se o jogador acertou ou errou a jogada */
+    short int rodada = 1; /* Variavel que registra o numero de rodadas */
     short int x_p1 = -1, y_p1 = -1, x_p2 = -1, y_p2 = -1; /* Variaveis que armazenam as coordenadas fornecidas pelos jogadores a cada jogada para serem informadas na proxima jogada */
-    int seed1, pontos_p1 = 0, pontos_p2 = 0; /* Pontos dos jogadores */
+    int pontos_p1 = 0, pontos_p2 = 0; /* Pontos dos jogadores */
+    int seed1; /* Variavel que armazena os seeds aleatorio a serem mandados para a funcao que distribui os navios aleatoriamente */
     short int acertos_p1 = 0, acertos_p2 = 0; /* Quantidade de navios destruidos por cada jogador */
     char nome_p1[TAM_NOME], nome_p2[TAM_NOME]; /* Nome dos jogadores */
-
+  
     srand((unsigned)time(NULL));
 
     montar_mapas(mostrar_mapa_p1, mostrar_mapa_p2, nav_mapa_p1, nav_mapa_p2);
@@ -139,7 +142,7 @@ void posicionar_navio(char mapa[][TAM_MAPA], short int tam_navio, char navio, un
     
     short int j, ran_x, ran_y, ran_direcao, check;
 
-    /* Uma coordenada do navio eh designada aleatoriamente ate que o navio possa ser montado sem sobreposicao com outros navio */ 
+    /* Uma coordenada do navio eh designada aleatoriamente ate que o navio possa ser montado sem sobreposicao com outros navios */ 
     do{
         check = 0; /* Conta quantas partes podem ser posicionadas na coordenada designada */
         ran_direcao = rand() % 2; /* Designa aleatoriamente a disposicao do navio entre horizontal ou vertical */
@@ -183,14 +186,14 @@ void imprimir_mapa(char mapa[][TAM_MAPA])
 {
     short int i, j;
 
-    for(j = 0; j < TAM_MAPA; ++j)
+    for(j = 0; j < TAM_MAPA; ++j) /* Imprime a numeracao das colunas antes da matriz */
         printf("%d\t", j);
     printf("\n\n");
     for(i = 0; i < TAM_MAPA; ++i)
     {
         for(j = 0; j < TAM_MAPA; ++j)
             printf("%c\t", mapa[i][j]);
-        printf("%d\n\n", i);
+        printf("%d\n\n", i); /* Imprime a numeracao das linhas no final de cada linha */
     }
 }
 
@@ -226,9 +229,11 @@ int jogada(char mostrar_mapa[][TAM_MAPA], char nav_mapa[][TAM_MAPA], char nome[T
 {
     int x, y;
 
+    imprimir_mapa(mostrar_mapa);
+    printf("\nRODADA %d\n", rodada);
+  
+    /* Obtem uma coordenada ate que ela seja validada por teste de consistencia */
     do{
-        imprimir_mapa(mostrar_mapa);
-        printf("\nRODADA %d\n", rodada);
         printf("\nAlmirante %s, escolha uma coordenada (X, Y) para atacar!\n", nome);
         printf("X: ");
         scanf("%d", &x);
@@ -237,27 +242,31 @@ int jogada(char mostrar_mapa[][TAM_MAPA], char nav_mapa[][TAM_MAPA], char nome[T
         if(x < 0 || x >= TAM_MAPA || y < 0 || y >= TAM_MAPA)
             printf("\nCoordenada invalida!\n\n");
         if(nav_mapa[x][y] == '*')
-            printf("\nEsta coordenada ja recebeu um ataque!\n\n");
+            printf("\nEsta coordenada ja recebeu um ataque!\n");
     }while(x < 0 || x >= TAM_MAPA || y < 0 || y >= TAM_MAPA || nav_mapa[x][y] == '*');
 
+    /* Passa a coordenada para registro como jogada anterior */
     *x_p = x;
     *y_p = y;
 
+    /* Registra no mapa que contem os navios a coordenada escolhida pelo jogador que ela ja foi usada, para que seja invalida nas rodadas seguintes */
+    nav_mapa[x][y] = '*';
+  
+    /* Se o tiro acertou algum navio */
     if(nav_mapa[x][y] != '~')
     {
-        printf("\nACERTO!\n\n");
-        mostrar_mapa[x][y] = nav_mapa[x][y];
-        nav_mapa[x][y] = '*';
-        *pontos += 1000;
-        *acertos += 1;
-        return(0);
-    }
+      printf("\nACERTO!\n\n");
+      mostrar_mapa[x][y] = nav_mapa[x][y]; /* Registra a coordenada com um tiro certeiro no mapa que eh mostrado ao jogador com o caractere do navio correspondente */
+      *pontos += 1000;
+      *acertos += 1;
+      return(0);
+     }
+    /* Se o tiro acertou agua */
     else
     {
-        printf("\nTiro ao mar...\n\n");
-        nav_mapa[x][y] = '*';
-        mostrar_mapa[x][y] = '*';
-        *pontos -= 100;
-        return(1);
+      printf("\nTiro ao mar...\n\n");
+      mostrar_mapa[x][y] = '*';
+      *pontos -= 100;
+      return(1);
     }
-}
+  }
