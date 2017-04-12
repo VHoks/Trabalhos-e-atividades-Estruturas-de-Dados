@@ -15,7 +15,7 @@ int vazio(void)
 
 int cheio(void)
 {
-    if(top >= TAM_MAX)
+    if(top >= TAM_MAX - 1)
         return(1);
     else
         return(0);
@@ -58,20 +58,24 @@ int main(void)
     short int i, j;
     srand((unsigned)time(NULL));
 
-    printf("Este programa empilha 10 numeros aleatorios e os imprime enquanto os desempilha.\n");
+    printf("Este programa empilha %d numeros aleatorios e os imprime enquanto os desempilha.\n", TAM_MAX);
 
-    for(i = 0; !cheio(); ++i)
+    while(!cheio())
+    //for(i = 0; !cheio(); ++i)
     {
         num = (rand() % 101) + 1;
         push(num);
         printf("%do numero: %d\n", i + 1, num);
+        ++i;
     }
 
     printf("\nSaindo da pilha:\n");
-    for(j = 0; !vazio(); ++j)
+    while(!vazio())
+    //for(j = 0; !vazio(); ++j)
     {
         num = pop();
         printf("%do numero a sair: %d\n", j + 1, num);
+        ++j;
     }
 
     printf("\nPilha vazia: %s", vazio()? "SIM" : "NAO");
