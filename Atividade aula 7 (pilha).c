@@ -55,24 +55,23 @@ int pop(void)
 int main(void)
 {
     short int num;
-    short int i;
+    short int i, j;
     srand((unsigned)time(NULL));
 
     printf("Este programa empilha 10 numeros aleatorios e os imprime enquanto os desempilha.\n");
 
-    for(i = 0; i < TAM_MAX; ++i)
+    for(i = 0; !cheio(); ++i)
     {
         num = (rand() % 101) + 1;
         push(num);
         printf("%do numero: %d\n", i + 1, num);
     }
 
-    printf("\nPilha:\n");
-
-    while(!vazio())
+    printf("\nSaindo da pilha:\n");
+    for(j = 0; !vazio(); ++j)
     {
         num = pop();
-        printf("%d\n", num);
+        printf("%do numero a sair: %d\n", j + 1, num);
     }
 
     printf("\nPilha vazia: %s", vazio()? "SIM" : "NAO");
