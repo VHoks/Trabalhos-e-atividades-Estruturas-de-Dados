@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define TAM_MAX 10
+#define TAM_MAX 9
 
 int queue[TAM_MAX];
 short int head = 0;
@@ -8,7 +8,7 @@ short int tail = -1;
 
 int vazio(void)
 {
-    if(head >= TAM_MAX)
+    if(head >= TAM_MAX + 1)
         return(1);
     else
         return(0);
@@ -56,26 +56,23 @@ int dequeue(void)
 int main(void)
 {
     short int num;
-    short int i = 0, j = 0;
+    short int i, j;
     srand((unsigned)time(NULL));
 
-    printf("Este programa enfileira %d numeros aleatorios e os imprime enquanto os retira da fila.\n", TAM_MAX);
+    printf("Este programa enfileira %d numeros aleatorios e os imprime enquanto os retira da fila.\n", TAM_MAX + 1);
     
-    while(!cheio())
-    //for(i = 0; i < TAM_MAX ; ++i)
+    for(i = 1; !cheio(); ++i)
     {
         num = (rand() % 101) + 1;
         enqueue(num);
-        printf("%do numero: %d\n", i + 1, num);
-        ++i;
+        printf("%do numero: %d\n", i, num);
     }
 
     printf("\nSaindo da fila:\n");
-
-    while(!vazio())
+    for(j = 1; !vazio(); ++j)
     {
         num = dequeue();
-        printf("%do numeros a sair: %d\n", j + 1, num);
+        printf("%do numero a sair: %d\n", j, num);
     }
 
     printf("\nFila vazia: %s", vazio()? "SIM" : "NAO");
