@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define TAM_MAX 10
+#define TAM_MAX 9
 
 int stack[TAM_MAX];
 short int top = -1;
@@ -15,7 +15,7 @@ int vazio(void)
 
 int cheio(void)
 {
-    if(top >= TAM_MAX - 1)
+    if(top >= TAM_MAX)
         return(1);
     else
         return(0);
@@ -58,24 +58,20 @@ int main(void)
     short int i, j;
     srand((unsigned)time(NULL));
 
-    printf("Este programa empilha %d numeros aleatorios e os imprime enquanto os desempilha.\n", TAM_MAX);
+    printf("Este programa empilha %d numeros aleatorios e os imprime enquanto os desempilha.\n", TAM_MAX + 1);
 
-    while(!cheio())
-    //for(i = 0; !cheio(); ++i)
+    for(i = 1; !cheio(); ++i)
     {
         num = (rand() % 101) + 1;
         push(num);
-        printf("%do numero: %d\n", i + 1, num);
-        ++i;
+        printf("%do numero: %d\n", i, num);
     }
 
     printf("\nSaindo da pilha:\n");
-    while(!vazio())
-    //for(j = 0; !vazio(); ++j)
+    for(j = 1; !vazio(); ++j)
     {
         num = pop();
-        printf("%do numero a sair: %d\n", j + 1, num);
-        ++j;
+        printf("%do numero a sair: %d\n", j, num);
     }
 
     printf("\nPilha vazia: %s", vazio()? "SIM" : "NAO");
